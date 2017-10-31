@@ -63,7 +63,7 @@ class Game extends React.Component {
       ],
       stepNumber: 0,
       xIsNext: true,
-       blockCdX: 5,
+       blockCdX: 4,
        blockCdO: 3
     };
   }
@@ -88,25 +88,18 @@ this.state.blockCdX=3;
 if ( squares[i]=="X" )
 this.state.blockCdO=3;
 
-squares[i] = this.state.xIsNext ? "X" : "O";
+squares[i] ="*";// this.state.xIsNext ? "X" : "O";
 }
       else 
        return ;
     }
     else 
-    squares[i] = this.state.xIsNext ? "X" : "O";
+    {
+      squares[i] = this.state.xIsNext ? "X" : "O";
+    }
     this.state.blockCdX= this.state.blockCdX-1;
     this.state.blockCdO= this.state.blockCdO-1;
-   if (block)
-        {
-          if (this.state.stepNumber%2 == 0 ){
- this.state.canBlockX=false;
-          }
-          else {
- this.state.canBlockO=false;
-            
-          }
-        }
+ 
     this.setState({
       history: history.concat([
         {
@@ -123,7 +116,9 @@ squares[i] = this.state.xIsNext ? "X" : "O";
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: (step % 2) === 0
+      xIsNext: (step % 2) === 0,
+      blockCdX:   4,
+      blockCdO:  3
     });
   }
 
@@ -132,22 +127,33 @@ squares[i] = this.state.xIsNext ? "X" : "O";
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to game start';
-      return (
-        <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
-        </li>
-      );
-    });
-
+    
+//        const moves = history.map((step, move) => {
+//      const desc = move ?
+//             'Go to move #' + move :
+//             'Go to game start';
+//            return (
+//             <li key={move}>
+//          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+//        </li>
+//      );
+//        });
+// const moves =<button onClick={() => this.jumpTo(null)}>{"Go to game start"}</button>
     let status;
     if (winner) {
+      if (winner==="*")
+      status = "This game is a draw!";
+        else 
       status = "Winner: " + winner;
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+
+      if (this.state.blockCdX<=0)
+        if (this.state.xIsNext)
+          status += "(can block)";
+      if (this.state.blockCdO<=0)
+        if (!this.state.xIsNext)
+          status += "(can block)";
     }
 
     return (
@@ -160,7 +166,7 @@ squares[i] = this.state.xIsNext ? "X" : "O";
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          //<ol>{moves}</ol>
         </div>
       </div>
     );
@@ -225,6 +231,12 @@ function calculateWinner(squares) {
 
 
 
+
+
+// WEBPACK FOOTER //
+// src/index.js
+
+ 
 
 
 // WEBPACK FOOTER //
