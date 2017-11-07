@@ -166,8 +166,7 @@ squares[i] ="*";// this.state.xIsNext ? "X" : "O";
         </div>
         <div className="game-info">
           <div>{status}</div>
-          //<ol>{moves}</ol>
-        </div>
+                  </div>
       </div>
     );
   }
